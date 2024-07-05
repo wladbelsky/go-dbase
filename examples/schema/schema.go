@@ -7,7 +7,7 @@ import (
 	"sort"
 	"strings"
 
-	"github.com/wladbelsky/go-dbase/dbase"
+	"github.com/Valentin-Kaiser/go-dbase/dbase"
 )
 
 func main() {

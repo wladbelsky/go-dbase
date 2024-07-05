@@ -10,7 +10,7 @@ import (
 	"strings"
 	"time"
 
-	"github.com/wladbelsky/go-dbase/dbase"
+	"github.com/Valentin-Kaiser/go-dbase/dbase"
 )
 
 const path = "../test_data/database/EXPENSES.DBC"
