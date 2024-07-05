@@ -446,7 +446,7 @@ func (row *Row) ToStruct(v interface{}) error {
 
 // Returns the name of the column as a trimmed string (max length 10)
 func (c *Column) Name() string {
-	return string(bytes.TrimRight(c.FieldName[:], "\x00"))
+	return string(bytes.TrimRight(c.FieldName[:], " \x00"))
 }
 
 // Returns the type of the column as string (length 1)
