@@ -340,6 +340,10 @@ func (file *File) getDateRepresentation(field *Field, _ bool) ([]byte, error) {
 	if !d.IsZero() { // if date is zero, return empty bytes
 		bin := []byte(d.Format("20060102"))
 		copy(raw, bin)
+	} else {
+		for i := range raw {
+			raw[i] = ' '
+		}
 	}
 	if len(raw) != int(field.column.Length) {
 		return nil, NewErrorf("invalid length %v bytes != %v bytes at column field: %v", len(raw), field.column.Length, field.Name())
