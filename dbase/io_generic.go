@@ -638,11 +638,11 @@ func (g GenericIO) getRelatedHandle(file *File) (io.ReadWriteSeeker, error) {
 	return handle, nil
 }
 
-// Walk the dir and find the file case insensitive
+// Walk the dir and find the file case-insensitive
 func findFile(f string) (string, error) {
 	var foundFile string
 	err := filepath.Walk(filepath.Dir(f), func(path string, _ os.FileInfo, err error) error {
-		if err != nil {
+		if err != nil && !os.IsPermission(err) && !os.IsNotExist(err) { // Ignore permission denied and not found errors
 			return err
 		}
 
