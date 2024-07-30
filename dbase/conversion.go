@@ -128,7 +128,7 @@ func appendSpaces(raw []byte, length int) []byte {
 	if len(raw) < length {
 		a := make([]byte, length-len(raw))
 		for i := range a {
-			a[i] = ' '
+			a[i] = '\x00'
 		}
 		return append(raw, a...)
 	}
