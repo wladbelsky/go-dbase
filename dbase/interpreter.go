@@ -438,11 +438,29 @@ func (file *File) parseNumeric(raw []byte, column *Column) (interface{}, error) 
 	return file.parseFloat(raw, column)
 }
 
+func convertIntOrFloatTo64(val interface{}) interface{} {
+	switch v := val.(type) {
+	case int:
+		return int64(v)
+	case int32:
+		return int64(v)
+	case int64:
+		return v
+	case float32:
+		return float64(v)
+	case float64:
+		return v
+	default:
+		return v
+	}
+}
+
 // Get the integer or float64 value as byte representation
 func (file *File) getNumericRepresentation(field *Field, skipSpacing bool) ([]byte, error) {
 	// N values are stored as string values, if no decimals return as int64, if decimals treat as float64
 	bin := make([]byte, 0)
-	f, fok := field.value.(float64)
+	val := convertIntOrFloatTo64(field.value)
+	f, fok := val.(float64)
 	if fok {
 		if f == float64(int64(f)) {
 			// if the value has no decimals, store as integer
@@ -450,15 +468,15 @@ func (file *File) getNumericRepresentation(field *Field, skipSpacing bool) ([]by
 		} else {
 			// if the value is a float, store as float
 			expression := fmt.Sprintf("%%.%df", field.column.Decimals)
-			bin = []byte(fmt.Sprintf(expression, field.value))
+			bin = []byte(fmt.Sprintf(expression, val))
 		}
 	}
-	_, iok := field.value.(int64)
+	_, iok := val.(int64)
 	if iok {
-		bin = []byte(fmt.Sprintf("%d", field.value))
+		bin = []byte(fmt.Sprintf("%d", val))
 	}
 	if !iok && !fok {
-		return nil, NewErrorf("invalid data type %T, expected int64 or float64 at column field: %v", field.value, field.Name())
+		return nil, NewErrorf("invalid data type %T, expected int64 or float64 at column field: %v", val, field.Name())
 	}
 	if skipSpacing {
 		return bin, nil
