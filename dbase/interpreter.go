@@ -475,8 +475,13 @@ func (file *File) getNumericRepresentation(field *Field, skipSpacing bool) ([]by
 	if iok {
 		bin = []byte(fmt.Sprintf("%d", val))
 	}
+
+	s, sok := val.(string)
+	if sok {
+		bin = []byte(s)
+	}
 	if !iok && !fok {
-		return nil, NewErrorf("invalid data type %T, expected int64 or float64 at column field: %v", val, field.Name())
+		return nil, NewErrorf("invalid data type %T, expected int, float or string at column field: %v", val, field.Name())
 	}
 	if skipSpacing {
 		return bin, nil
