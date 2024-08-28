@@ -480,7 +480,7 @@ func (file *File) getNumericRepresentation(field *Field, skipSpacing bool) ([]by
 	if sok {
 		bin = []byte(s)
 	}
-	if !iok && !fok {
+	if !iok && !fok && !sok {
 		return nil, NewErrorf("invalid data type %T, expected int, float or string at column field: %v", val, field.Name())
 	}
 	if skipSpacing {
